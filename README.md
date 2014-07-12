@@ -21,7 +21,9 @@ metalsmith
 	}));
 ```
 
-  This will generate `/topics/[tagname]/index.html` pages in your `biuld` directory with array of `posts` objects. You can use `tag` for tag name in your handlebars.
+  This will generate `/topics/[tagname].html` pages in your `biuld` directory with array of `posts` objects. You can use `tag` for tag name in your handlebars.
+
+  Use `metalsmith-permalink` to convert into a custom permalink pattern to files, as you would do with anything else.
 
 ## Known Issues
 
