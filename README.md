@@ -1,12 +1,23 @@
 # metalsmith-tags
 
-  A metalsmith plugin to create dedicated pages for tags in posts or pages.
+  A metalsmith plugin to create dedicated pages for tags in provided in metalsmith pages.
 
 ## Installation
 
     $ npm install metalsmith-tags
 
 ## Javascript Usage
+
+  In your pages:
+
+```
+---
+title: This is page with tags
+tags: tagged, page, metalsmith, plugin
+---
+
+Hello World
+```
 
   Pass the plugin to `Metalsmith#use`:
 
