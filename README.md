@@ -55,9 +55,9 @@ metalsmith
 
 ## Result
 
-  This will generate `/topics/[tagname].html` pages in your `biuld` directory with array of `posts` objects on which you can iteretae on. You can use `tag` for tag name in your templates.
+  This will generate `/topics/[tagname].html` pages in your `biuld` directory with array of `posts` objects on which you can iterate on. You can use `tag` for tag name in your templates.
 
-  After plugin your pages will remain tag properties, but it will me modiefied to `Array` and won't remain as comma sepperated walues.
+  After plugin your pages will remain tag properties, but it will me modified to `Array` and won't remain as comma separated values.
 
   Use `metalsmith-permalink` to convert into a custom permalink pattern to files, as you would do with anything else.
 
