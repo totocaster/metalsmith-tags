@@ -30,9 +30,9 @@ You can use different handle for tags, by configuting option. `tags` is default.
 {
   "plugins": {
     "metalsmith-tags": {
-      "handle": "tags",                   // yaml key for tag list in you pages
-      "path": "topics",                   // path for result pages
-      "template": "/partials/tag.hbt"     // template to use for tag listing
+      "handle": "tags",
+      "path": "topics",
+      "template": "/partials/tag.hbt"
     }
   }
 }
