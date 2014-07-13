@@ -6,7 +6,7 @@
 
     $ npm install metalsmith-tags
 
-## Javascript Usage
+## Description in Pages
 
   In your pages:
 
@@ -19,6 +19,27 @@ tags: tagged, page, metalsmith, plugin
 Hello World
 ```
 
+You can use different handle for tags, by configuting option. `tags` is default.
+
+
+## CLI Usage
+
+  Install the node modules and then add the `metalsmith-tags` key to your `metalsmith.json` plugins. The simplest use case just requires tag handle you want to use:
+
+```json
+{
+  "plugins": {
+    "metalsmith-tags": {
+      "handle": "tags",                   // yaml key for tag list in you pages
+      "path": "topics",                   // path for result pages
+      "template": "/partials/tag.hbt"     // template to use for tag listing
+    }
+  }
+}
+```
+
+## Javascript Usage
+
   Pass the plugin to `Metalsmith#use`:
 
 ```js
@@ -26,20 +47,17 @@ var tags = require('metalsmith-tags');
 
 metalsmith
 	.use(tags({
-	    handle: 'tags', // how do you describe tags in your pages yaml
-	    path:'topics', // path for result pages
-	    template:'/partials/tag.hbt' // template to use for tag listing
+	    handle: 'tags',                  // yaml key for tag list in you pages
+	    path:'topics',                   // path for result pages
+	    template:'/partials/tag.hbt'     // template to use for tag listing
 	}));
 ```
 
-  This will generate `/topics/[tagname].html` pages in your `biuld` directory with array of `posts` objects. You can use `tag` for tag name in your handlebars.
+## Result
+
+  This will generate `/topics/[tagname].html` pages in your `biuld` directory with array of `posts` objects on which you can iteretae on. You can use `tag` for tag name in your templates.
 
   Use `metalsmith-permalink` to convert into a custom permalink pattern to files, as you would do with anything else.
-
-## Known Issues
-
-* Only handlebars are tested at the moment.
-* CLI tools are not tested.
 
 ## Contribution
 
