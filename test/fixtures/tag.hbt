@@ -1,0 +1,4 @@
+<h1>Posts for {{tag}}</h1>
+<ul>{{#each posts}}
+	<li>{{title}}</li>
+{{/each}}</ul>

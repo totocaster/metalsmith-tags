@@ -4,7 +4,7 @@
   "description": "A metalsmith plugin to create dedicated pages for tags in posts or pages.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,12 @@
   "bugs": {
     "url": "https://github.com/totocaster/metalsmith-tags/issues"
   },
-  "homepage": "https://github.com/totocaster/metalsmith-tags"
+  "homepage": "https://github.com/totocaster/metalsmith-tags",
+  "devDependencies": {
+    "mocha": "1.x",
+    "metalsmith": "0.x",
+    "metalsmith-templates":"~0.5.2",
+    "handlebars":"*",
+    "assert-dir-equal": "0.0.1"
+  }
 }
