@@ -1,4 +1,4 @@
 <h1>Posts for {{tag}}</h1>
 <ul>{{#each posts}}
-	<li>{{title}}</li>
+	<li><small>{{dateFormat date "DD/MM/YYYY"}}</small> {{title}}</li>
 {{/each}}</ul>
