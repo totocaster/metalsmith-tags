@@ -32,7 +32,9 @@ You can use different handle for tags, by configuting option. `tags` is default.
     "metalsmith-tags": {
       "handle": "tags",
       "path": "topics",
-      "template": "/partials/tag.hbt"
+      "template": "/partials/tag.hbt",
+      "sortBy": "date",
+      "reverse": true
     }
   }
 }
@@ -49,7 +51,9 @@ metalsmith
 	.use(tags({
 	    handle: 'tags',                  // yaml key for tag list in you pages
 	    path:'topics',                   // path for result pages
-	    template:'/partials/tag.hbt'     // template to use for tag listing
+	    template:'/partials/tag.hbt',    // template to use for tag listing
+      sortBy: 'date',                  // provide posts sorted by 'date' (optional)
+      reverse: true                    // sort direction (optional)
 	}));
 ```
 
