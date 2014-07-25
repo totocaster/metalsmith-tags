@@ -22,10 +22,11 @@
   },
   "homepage": "https://github.com/totocaster/metalsmith-tags",
   "devDependencies": {
-    "mocha": "1.x",
+    "assert-dir-equal": "0.0.1",
+    "handlebars": "*",
     "metalsmith": "0.x",
-    "metalsmith-templates":"~0.5.2",
-    "handlebars":"*",
-    "assert-dir-equal": "0.0.1"
+    "metalsmith-templates": "~0.5.2",
+    "mocha": "1.x",
+    "moment": "^2.7.0"
   }
 }
