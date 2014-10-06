@@ -26,6 +26,25 @@ describe('metalsmith-tags', function(){
       });
   });
 
+  it('should create a tags property to metalsmith.data', function(done) {
+    var tagList;
+
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path:   'topics'
+      }))
+      .use(function(files, metalsmith, done) {
+        tagList = metalsmith.data.tags;
+        done();
+      })
+      .build(function(err, files){
+        if (err) return done(err);
+        assert.deepEqual(Object.keys(tagList).sort(), ['hello', 'tag', 'this', 'this-is', 'world']);
+        done();
+      });
+  });
+
   it('should create tag page with post lists according to template and sorted by date decreasing', function(done){
     Metalsmith('test/fixtures')
       .use(tags({
