@@ -49,8 +49,8 @@ describe('metalsmith-tags', function(){
     Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
-        path:'topics',
-        template:'/../tag.hbt',
+        path: 'topics/:tag.html',
+        template: '/../tag.hbt',
         sortBy: 'date',
         reverse: true
       }))
