@@ -57,7 +57,26 @@ describe('metalsmith-tags', function(){
       .use(templates({engine:'handlebars'}))
       .build(function(err,files){
         if (err) return done(err);
-        equal('test/fixtures/expected/topics', 'test/fixtures/build/topics');
+        equal('test/fixtures/expected/no-pagination/topics', 'test/fixtures/build/topics');
+        done();
+      });
+  });
+
+  it('should create tag pages with pagination with post lists according to template and sorted by date decreasing', function(done){
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics/:tag/index.html',
+        pathPage: 'topics/:tag/:num/index.html',
+        perPage: 1,
+        template: '/../tag.hbt',
+        sortBy: 'date',
+        reverse: true
+      }))
+      .use(templates({engine:'handlebars'}))
+      .build(function(err,files){
+        if (err) return done(err);
+        equal('test/fixtures/expected/pagination/topics', 'test/fixtures/build/topics');
         done();
       });
   });
