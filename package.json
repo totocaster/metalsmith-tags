@@ -24,8 +24,8 @@
   "devDependencies": {
     "assert-dir-equal": "0.0.1",
     "handlebars": "*",
-    "metalsmith": "0.x",
-    "metalsmith-templates": "~0.5.2",
+    "metalsmith": "1.x",
+    "metalsmith-templates": "~0.6.0",
     "mocha": "1.x",
     "moment": "^2.7.0"
   }
