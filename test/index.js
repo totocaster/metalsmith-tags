@@ -26,7 +26,7 @@ describe('metalsmith-tags', function() {
       });
   });
 
-  it('should create a tags property to metalsmith.data', function(done) {
+  it('should create a tags property to metalsmith.metadata', function(done) {
     var tagList;
 
     Metalsmith('test/fixtures')
@@ -35,7 +35,7 @@ describe('metalsmith-tags', function() {
         path: 'topics'
       }))
       .use(function(files, metalsmith, done) {
-        tagList = metalsmith.data.tags;
+        tagList = metalsmith.metadata().tags;
         done();
       })
       .build(function(err, files){
@@ -80,5 +80,4 @@ describe('metalsmith-tags', function() {
         done();
       });
   });
-
 });
