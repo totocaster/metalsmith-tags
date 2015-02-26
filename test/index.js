@@ -6,14 +6,14 @@ var tags = require('..');
 var Handlebars = require('handlebars');
 var moment = require('moment');
 
-Handlebars.registerHelper('dateFormat', function( context, format, block ) {
-    var f = format || "DD/MM/YYYY";
-    return moment( new Date(context) ).format(f);
+Handlebars.registerHelper('dateFormat', function(context, format) {
+  var f = format || 'DD/MM/YYYY';
+  return moment( new Date(context) ).format(f);
 });
 
-describe('metalsmith-tags', function(){
+describe('metalsmith-tags', function() {
 
-	it('should modify comma separated tags into dehumanized array', function(done){
+	it('should modify comma separated tags into dehumanized array', function(done) {
 		Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
@@ -21,7 +21,7 @@ describe('metalsmith-tags', function(){
       }))
       .build(function(err,files){
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),["hello","world","this-is","tag"].toString());
+        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this-is', 'tag'].toString());
         done();
       });
   });
@@ -32,7 +32,7 @@ describe('metalsmith-tags', function(){
     Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
-        path:   'topics'
+        path: 'topics'
       }))
       .use(function(files, metalsmith, done) {
         tagList = metalsmith.data.tags;
@@ -45,7 +45,7 @@ describe('metalsmith-tags', function(){
       });
   });
 
-  it('should create tag page with post lists according to template and sorted by date decreasing', function(done){
+  it('should create tag page with post lists according to template and sorted by date decreasing', function(done) {
     Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
@@ -54,15 +54,15 @@ describe('metalsmith-tags', function(){
         sortBy: 'date',
         reverse: true
       }))
-      .use(templates({engine:'handlebars'}))
-      .build(function(err,files){
+      .use(templates({engine: 'handlebars'}))
+      .build(function(err){
         if (err) return done(err);
         equal('test/fixtures/expected/no-pagination/topics', 'test/fixtures/build/topics');
         done();
       });
   });
 
-  it('should create tag pages with pagination with post lists according to template and sorted by date decreasing', function(done){
+  it('should create tag pages with pagination with post lists according to template and sorted by date decreasing', function(done) {
     Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
@@ -73,8 +73,8 @@ describe('metalsmith-tags', function(){
         sortBy: 'date',
         reverse: true
       }))
-      .use(templates({engine:'handlebars'}))
-      .build(function(err,files){
+      .use(templates({engine: 'handlebars'}))
+      .build(function(err){
         if (err) return done(err);
         equal('test/fixtures/expected/pagination/topics', 'test/fixtures/build/topics');
         done();
