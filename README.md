@@ -74,7 +74,7 @@ metalsmith
 {
   "handle": "tags",
   "path": "topics/:tag/index.html",
-  "pathPage": 'topics/:tag/:num/index.html',
+  "pathPage": "topics/:tag/:num/index.html",
   "perPage": 6,
   "template": "/partials/tag.hbt",
   "sortBy": "date",
