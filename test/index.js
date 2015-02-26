@@ -13,8 +13,8 @@ Handlebars.registerHelper('dateFormat', function(context, format) {
 
 describe('metalsmith-tags', function() {
 
-	it('should modify comma separated tags into dehumanized array', function(done) {
-		Metalsmith('test/fixtures')
+  it('should modify comma separated tags into dehumanized array', function(done) {
+    Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
         path:'topics'
