@@ -40,7 +40,7 @@ You can use different handle for the tags, by configuring the `handle` option. `
 }
 ```
 
-## Javascript Usage
+## JavaScript Usage
 
   Pass the plugin to `Metalsmith#use`:
 
@@ -65,6 +65,8 @@ metalsmith
 
   You can use `metalsmith-permalink` to customize the permalink of the tag pages as you would do with anything else.
 
+  It is possible to use `opts.metadataKey` for defining the name of the global tag list.
+  By default it is `'tags'`.
 
 ## Pagination
 
