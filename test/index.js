@@ -21,7 +21,7 @@ describe('metalsmith-tags', function() {
       }))
       .build(function(err,files){
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this-is', 'tag'].toString());
+        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
         done();
       });
   });
@@ -40,7 +40,7 @@ describe('metalsmith-tags', function() {
       })
       .build(function(err, files){
         if (err) return done(err);
-        assert.deepEqual(Object.keys(tagList).sort(), ['hello', 'tag', 'this', 'this-is', 'world']);
+        assert.deepEqual(Object.keys(tagList).sort(), ['hello', 'tag', 'this', 'this is', 'world']);
         done();
       });
   });
