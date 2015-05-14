@@ -1,3 +1,9 @@
+<a name="0.9.0"></a>
+# 0.9.0
+
+* Bugfix: Don't convert spaces in tags to `-` for views. [#16](https://github.com/totocaster/metalsmith-tags/pull/16)
+* Update dependencies.
+
 <a name="0.8.1"></a>
 # 0.8.1
 
