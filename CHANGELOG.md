@@ -1,3 +1,8 @@
+<a name="0.9.1"></a>
+# 0.9.1
+
+* Bugfix: When trimming a tag make sure it's a string.
+
 <a name="0.9.0"></a>
 # 0.9.0
 
