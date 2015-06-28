@@ -40,7 +40,18 @@ describe('metalsmith-tags', function() {
       })
       .build(function(err, files){
         if (err) return done(err);
-        assert.deepEqual(Object.keys(tagList).sort(), ['hello', 'tag', 'this', 'this is', 'world']);
+        var tagListKeys = Object.keys(tagList).sort();
+        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
+        // Ensure every object in the metadata tags array is a data object.
+        tagListKeys.forEach(function(tagName) {
+          var tagPostsArray = tagList[tagName];
+          tagPostsArray.forEach(function(fileData) {
+            assert.equal(typeof fileData, 'object');
+            assert.ok(fileData.stats);
+            assert.ok(fileData.contents);
+            assert.ok(fileData.tags);
+          });
+        });
         done();
       });
   });
