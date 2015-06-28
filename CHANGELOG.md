@@ -1,3 +1,9 @@
+<a name="0.10.0"></a>
+# 0.10.0
+
+* Performance: hopefully improve performance of metalsmith-tags with large blogs by
+reducing overhead.
+
 <a name="0.9.1"></a>
 # 0.9.1
 
