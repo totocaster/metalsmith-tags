@@ -1,3 +1,8 @@
+<a name="0.10.1"></a>
+# 0.10.1
+
+* Feature: allow skipping of updating of metadata.
+
 <a name="0.10.0"></a>
 # 0.10.0
 

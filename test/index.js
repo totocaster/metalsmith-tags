@@ -56,6 +56,26 @@ describe('metalsmith-tags', function() {
       });
   });
 
+  it('should skip creating a tags property on metalsmith.metadata', function(done) {
+    var tagList;
+
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics',
+        skipMetadata: true
+      }))
+      .use(function(files, metalsmith, done) {
+        tagList = metalsmith.metadata().tags;
+        done();
+      })
+      .build(function(err, files){
+        if (err) return done(err);
+        assert.equal(typeof tagList, 'undefined');
+        done();
+      });
+  });
+
   var templateConfig = {
     engine: 'handlebars',
     directory: './'

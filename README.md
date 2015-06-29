@@ -34,7 +34,8 @@ You can use different handle for the tags, by configuring the `handle` option. `
       "path": "topics/:tag.html",
       "template": "/partials/tag.hbt",
       "sortBy": "date",
-      "reverse": true
+      "reverse": true,
+      "skipMetadata": false
     }
   }
 }
@@ -50,10 +51,13 @@ var tags = require('metalsmith-tags');
 metalsmith
     .use(tags({
         handle: 'tags',                  // yaml key for tag list in you pages
-        path:'topics/:tag.html',                   // path for result pages
+        path:'topics/:tag.html',         // path for result pages
         template:'/partials/tag.hbt',    // template to use for tag listing
         sortBy: 'date',                  // provide posts sorted by 'date' (optional)
-        reverse: true                    // sort direction (optional)
+        reverse: true,                   // sort direction (optional)
+        skipMetadata: false              // skip updating metalsmith's metadata object.
+                                         // useful for improving performance on large blogs
+                                         // (optional)
     }));
 ```
 
@@ -80,7 +84,8 @@ metalsmith
   "perPage": 6,
   "template": "/partials/tag.hbt",
   "sortBy": "date",
-  "reverse": true
+  "reverse": true,
+  "skipMetadata": false
 }
 ```
 
