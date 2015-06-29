@@ -49,16 +49,22 @@ You can use different handle for the tags, by configuring the `handle` option. `
 var tags = require('metalsmith-tags');
 
 metalsmith
-    .use(tags({
-        handle: 'tags',                  // yaml key for tag list in you pages
-        path:'topics/:tag.html',         // path for result pages
-        template:'/partials/tag.hbt',    // template to use for tag listing
-        sortBy: 'date',                  // provide posts sorted by 'date' (optional)
-        reverse: true,                   // sort direction (optional)
-        skipMetadata: false              // skip updating metalsmith's metadata object.
-                                         // useful for improving performance on large blogs
-                                         // (optional)
-    }));
+  .use(tags({
+    // yaml key for tag list in you pages
+    handle: 'tags',
+    // path for result pages
+    path:'topics/:tag.html',
+    // template to use for tag listing
+    template:'/partials/tag.hbt',
+    // provide posts sorted by 'date' (optional)
+    sortBy: 'date',
+    // sort direction (optional)
+    reverse: true,
+    // skip updating metalsmith's metadata object.
+    // useful for improving performance on large blogs
+    // (optional)
+    skipMetadata: false
+  }));
 ```
 
 ## Result
