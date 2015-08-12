@@ -25,7 +25,7 @@
     "assert-dir-equal": "1.0.1",
     "handlebars": "*",
     "metalsmith": "1.x",
-    "metalsmith-templates": "~0.7.0",
+    "metalsmith-layouts": "1.x",
     "mocha": "2.x",
     "moment": "^2.10.3"
   }

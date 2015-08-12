@@ -1,7 +1,7 @@
 var assert = require('assert');
 var equal = require('assert-dir-equal');
 var Metalsmith = require('metalsmith');
-var templates = require('metalsmith-templates');
+var layouts = require('metalsmith-layouts');
 var tags = require('../lib');
 var Handlebars = require('handlebars');
 var moment = require('moment');
@@ -78,7 +78,8 @@ describe('metalsmith-tags', function() {
 
   var templateConfig = {
     engine: 'handlebars',
-    directory: './'
+    directory: './',
+    pattern: "topics/**/*.html"
   };
 
   it('should create tag page with post lists according to template and sorted by date decreasing', function(done) {
@@ -86,11 +87,11 @@ describe('metalsmith-tags', function() {
       .use(tags({
         handle: 'tags',
         path: 'topics/:tag.html',
-        template: './tag.hbt',
+        layout: './tag.hbt',
         sortBy: 'date',
         reverse: true
       }))
-      .use(templates(templateConfig))
+      .use(layouts(templateConfig))
       .build(function(err){
         if (err) return done(err);
         equal('test/fixtures/expected/no-pagination/topics', 'test/fixtures/build/topics');
@@ -105,11 +106,11 @@ describe('metalsmith-tags', function() {
         path: 'topics/:tag/index.html',
         pathPage: 'topics/:tag/:num/index.html',
         perPage: 1,
-        template: './tag.hbt',
+        layout: './tag.hbt',
         sortBy: 'date',
         reverse: true
       }))
-      .use(templates(templateConfig))
+      .use(layouts(templateConfig))
       .build(function(err){
         if (err) return done(err);
         equal('test/fixtures/expected/pagination/topics', 'test/fixtures/build/topics');
