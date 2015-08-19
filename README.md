@@ -32,7 +32,7 @@ You can use different handle for the tags, by configuring the `handle` option. `
     "metalsmith-tags": {
       "handle": "tags",
       "path": "topics/:tag.html",
-      "template": "/partials/tag.hbt",
+      "layout": "/partials/tag.hbt",
       "sortBy": "date",
       "reverse": true,
       "skipMetadata": false
@@ -54,8 +54,8 @@ metalsmith
     handle: 'tags',
     // path for result pages
     path:'topics/:tag.html',
-    // template to use for tag listing
-    template:'/partials/tag.hbt',
+    // layout to use for tag listing
+    layout:'/partials/tag.hbt',
     // provide posts sorted by 'date' (optional)
     sortBy: 'date',
     // sort direction (optional)
@@ -69,7 +69,7 @@ metalsmith
 
 ## Result
 
-  This will generate `topics/[tagname].html` pages in your `build` directory with array of `pagination.files` objects on which you can iterate on. You can use `tag` for tag name in your templates. (You can refer to tests folder for tags template.)
+  This will generate `topics/[tagname].html` pages in your `build` directory with array of `pagination.files` objects on which you can iterate on. You can use `tag` for tag name in your layouts. (You can refer to tests folder for tags layout.)
 
   The `tags` property on your pages will remain but it will be modified to an array of String containing the tags.
 
@@ -88,7 +88,7 @@ metalsmith
   "path": "topics/:tag/index.html",
   "pathPage": "topics/:tag/:num/index.html",
   "perPage": 6,
-  "template": "/partials/tag.hbt",
+  "layout": "/partials/tag.hbt",
   "sortBy": "date",
   "reverse": true,
   "skipMetadata": false
