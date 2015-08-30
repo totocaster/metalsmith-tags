@@ -22,6 +22,7 @@ describe('metalsmith-tags', function() {
       .build(function(err,files){
         if (err) return done(err);
         assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
+        assert.equal(files['index.html'].tagsUrlSafe.toString(),['hello', 'world', 'this-is', 'tag'].toString());
         done();
       });
   });

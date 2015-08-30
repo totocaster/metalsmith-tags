@@ -80,6 +80,8 @@ metalsmith
 
   The `tags` property on your pages will remain but it will be modified to an array of String containing the tags.
 
+  There will also be a `tagsUrlSafe` array created that will contain an array of url safe tag names for use in url creation.
+
   You can use `metalsmith-permalink` to customize the permalink of the tag pages as you would do with anything else.
 
   It is possible to use `opts.metadataKey` for defining the name of the global tag list.
