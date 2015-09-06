@@ -1,3 +1,8 @@
+<a name="0.13.0"></a>
+# 0.13.0
+
+* Feature: added better support for `metalsmith-pagination` plug-in.
+
 <a name="0.12.0"></a>
 # 0.12.0
 
