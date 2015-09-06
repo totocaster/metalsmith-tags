@@ -1,3 +1,13 @@
+<a name="0.12.0"></a>
+# 0.12.0
+
+* Feature: added new `tagsUrlSafe` property to every file, so there is access to url safe tag slugs.
+
+<a name="0.11.0"></a>
+# 0.11.0
+
+* Feature: added support for metalsmith-layouts.
+
 <a name="0.10.1"></a>
 # 0.10.1
 
