@@ -28,5 +28,8 @@
     "metalsmith-layouts": "1.x",
     "mocha": "2.x",
     "moment": "^2.10.3"
+  },
+  "dependencies": {
+    "slug": "^0.9.1"
   }
 }
