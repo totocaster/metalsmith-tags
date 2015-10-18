@@ -1,3 +1,8 @@
+<a name="1.0.0"></a>
+# 1.0.0
+
+* Feature: Use [node-slug](https://github.com/dodo/node-slug) package when creating a page's slug.
+
 <a name="0.13.0"></a>
 # 0.13.0
 

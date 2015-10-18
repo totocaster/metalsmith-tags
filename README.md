@@ -38,7 +38,10 @@ You can use different handle for the tags, by configuring the `handle` option. `
       */
       "sortBy": "date",
       "reverse": true,
-      "skipMetadata": false
+      "skipMetadata": false,
+      "slug": {
+        "mode": "rfc3986"
+      }
     }
   }
 }
@@ -70,7 +73,9 @@ metalsmith
     // skip updating metalsmith's metadata object.
     // useful for improving performance on large blogs
     // (optional)
-    skipMetadata: false
+    skipMetadata: false,
+    // Any options you want to pass to the [slug](https://github.com/dodo/node-slug) package.
+    slug: {mode: 'rfc3986'}
   }));
 ```
 
@@ -103,7 +108,10 @@ metalsmith
   */
   "sortBy": "date",
   "reverse": true,
-  "skipMetadata": false
+  "skipMetadata": false,
+  "slug": {
+    "mode": "rfc3986"
+  }
 }
 ```
 
