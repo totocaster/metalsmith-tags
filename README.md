@@ -2,6 +2,8 @@
 
   A metalsmith plugin to create dedicated pages for tags in provided in metalsmith pages.
 
+  **NOTE**: looking for new maintainers of this project. please consult [this issue for discussion.](https://github.com/totocaster/metalsmith-tags/issues/26)
+
 ## Installation
 
     $ npm install metalsmith-tags
