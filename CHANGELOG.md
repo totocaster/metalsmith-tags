@@ -1,3 +1,8 @@
+<a name="1.1.0"></a>
+# 1.1.0
+
+* Feature: Add `urlSafe` property to each object for better url creation in templates.
+
 <a name="1.0.0"></a>
 # 1.0.0
 
