@@ -5,6 +5,7 @@ var layouts = require('metalsmith-layouts');
 var tags = require('../lib');
 var Handlebars = require('handlebars');
 var moment = require('moment');
+var slug = require('slug');
 
 Handlebars.registerHelper('dateFormat', function(context, format) {
   var f = format || 'DD/MM/YYYY';
@@ -52,6 +53,33 @@ describe('metalsmith-tags', function() {
             assert.ok(fileData.contents);
             assert.ok(fileData.tags);
           });
+        });
+        done();
+      });
+  });
+
+  it('should add a urlSafe property to each tag post list', function(done) {
+    var tagList;
+
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics'
+      }))
+      .use(function(files, metalsmith, done) {
+        tagList = metalsmith.metadata().tags;
+        done();
+      })
+      .build(function(err, files){
+        if (err) return done(err);
+        var tagListKeys = Object.keys(tagList).sort();
+        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
+        // Ensure every object in the metadata tags array is a data object.
+        tagListKeys.forEach(function(tagName) {
+          var tagPostsArray = tagList[tagName];
+          assert.ok(tagList[tagName].urlSafe);
+          assert.equal(typeof tagList[tagName].urlSafe, 'string');
+          assert.equal(slug(tagName), tagList[tagName].urlSafe);
         });
         done();
       });
