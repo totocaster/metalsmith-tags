@@ -146,4 +146,21 @@ describe('metalsmith-tags', function() {
         done();
       });
   });
+
+  it('should support custom slug functions', function(done) {
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics',
+        slug: function(tag) {
+          return tag.toUpperCase();
+        }
+      }))
+      .build(function(err, files) {
+        if (err) return done(err);
+        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
+        assert.equal(files['index.html'].tagsUrlSafe.toString(),['HELLO', 'WORLD', 'THIS IS', 'TAG'].toString());
+        done();
+      });
+  })
 });
