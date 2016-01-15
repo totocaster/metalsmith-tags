@@ -77,6 +77,8 @@ metalsmith
     // (optional)
     skipMetadata: false,
     // Any options you want to pass to the [slug](https://github.com/dodo/node-slug) package.
+    // Can also supply a custom slug function.
+    // slug: function(tag) { return tag.toLowerCase() }
     slug: {mode: 'rfc3986'}
   }));
 ```
