@@ -1,3 +1,8 @@
+<a name="1.2.0"></a>
+# 1.2.0
+
+* Feature: Can supply an optional function to control how tags are formatted.
+
 <a name="1.1.0"></a>
 # 1.1.0
 
