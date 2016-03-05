@@ -85,6 +85,41 @@ describe('metalsmith-tags', function() {
       });
   });
 
+  it('should add a count property to each tag post list', function(done) {
+    var tagList;
+    var countList = {
+      "hello": 4,
+      "tag": 3,
+      "world": 1,
+      "this is": 1,
+      "this": 1
+    };
+
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics'
+      }))
+      .use(function(files, metalsmith, done) {
+        tagList = metalsmith.metadata().tags;
+        done();
+      })
+      .build(function(err, files){
+        if (err) return done(err);
+        var tagListKeys = Object.keys(tagList).sort();
+        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
+        // Ensure every object in the metadata tags array is a data object.
+        tagListKeys.forEach(function(tagName) {
+          var tagPostsArray = tagList[tagName];
+          assert.ok(tagList[tagName].urlSafe);
+          assert.equal(typeof tagList[tagName].urlSafe, 'string');
+          assert.equal(slug(tagName), tagList[tagName].urlSafe);
+          assert.equal(tagList[tagName].count, countList[tagName]);
+        });
+        done();
+      });
+  });
+
   it('should skip creating a tags property on metalsmith.metadata', function(done) {
     var tagList;
 
