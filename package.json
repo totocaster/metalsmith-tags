@@ -16,18 +16,17 @@
     "tags"
   ],
   "author": "Toto Tvalavadze <toto@totocaster.com>",
+  "contributors": [
+    "Thilo Maier <git@maier.asia>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/totocaster/metalsmith-tags/issues"
   },
   "homepage": "https://github.com/totocaster/metalsmith-tags",
   "devDependencies": {
-    "assert-dir-equal": "1.0.1",
-    "handlebars": "*",
-    "metalsmith": "1.x",
-    "metalsmith-layouts": "1.x",
-    "mocha": "2.x",
-    "moment": "^2.10.3"
+    "metalsmith": "^2.2.0",
+    "mocha": "^3.0.2"
   },
   "dependencies": {
     "lodash": "^4.15.0",
