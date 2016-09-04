@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-tags",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A metalsmith plugin to create dedicated pages for tags in posts or pages.",
   "main": "lib/index.js",
   "scripts": {
