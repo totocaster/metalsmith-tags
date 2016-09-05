@@ -1,4 +1,0 @@
-<h1>Posts for {{tag}}</h1>
-<ul>{{#each pagination.files}}
-	<li><small>{{dateFormat date "DD/MM/YYYY"}}</small> {{title}}</li>
-{{/each}}</ul>{{#if pagination.previous}}<a href="{{pagination.previous.path}}">Previous</a>{{/if}}{{#if pagination.next}}<a href="{{pagination.next.path}}">Next</a>{{/if}}
