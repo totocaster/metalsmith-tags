@@ -29,3 +29,6 @@ test/fixtures/build/*
 
 # JetBrains project files
 .idea
+
+# Exclude ESLint config as long as it has not been officially adopted for project
+.eslintrc.json
