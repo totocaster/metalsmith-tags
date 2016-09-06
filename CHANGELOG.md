@@ -1,3 +1,8 @@
+* Fix #21 and #28
+* Align data structures of page tags and global tags to make reusing partials for accessing either easier.
+* Remove `skipMetadata` option.
+* Cleanup tests.
+
 <a name="1.2.0"></a>
 # 1.2.0
 
