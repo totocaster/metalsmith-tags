@@ -9,12 +9,12 @@ describe('metalsmith-tags', function() {
       builder.use(tags());
       builder.build(function(err, files) {
         if (err) return done(err);
-        assert.deepEqual(files['index.html'].tags, [
-          { name: 'hello', urlSafe: 'hello' },
-          { name: 'tag', urlSafe: 'tag' },
-          { name: 'this is', urlSafe: 'this-is' },
-          { name: 'world', urlSafe: 'world' }
-        ]);
+        assert.deepEqual(files['index.html'].tags, {
+          hello: { urlSafe: 'hello' },
+          tag: { urlSafe: 'tag' },
+          'this is': { urlSafe: 'this-is' },
+          world: { urlSafe: 'world' }
+        });
         done();
       });
     });
@@ -239,12 +239,12 @@ describe('metalsmith-tags', function() {
       builder.build(function(err, files) {
         if (err) return done(err);
 
-        assert.deepEqual(files['index.html'].tags, [
-          { name: 'hello', urlSafe: 'HELLO' },
-          { name: 'tag', urlSafe: 'TAG' },
-          { name: 'this is', urlSafe: 'THIS IS' },
-          { name: 'world', urlSafe: 'WORLD' }
-        ]);
+        assert.deepEqual(files['index.html'].tags, {
+          hello: { urlSafe: 'HELLO' },
+          tag: { urlSafe: 'TAG' },
+          'this is': { urlSafe: 'THIS IS' },
+          world: { urlSafe: 'WORLD' }
+        });
 
         done();
       });

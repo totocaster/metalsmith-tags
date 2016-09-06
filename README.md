@@ -104,14 +104,21 @@ tags: tag, another tag, yet another tag
 results in
 
 ```
-tags: [
-  { name: 'another tag', urlSafe: 'another-tag' },
-  { name: 'tag', urlSafe: 'tag' },
-  { name: 'yet another tag', 'yet-another-tag' }
-]
+tags: {
+  'another tag': { urlSafe: 'another-tag' },
+  tag: { urlSafe: 'tag' },
+  'yet another tag': { urlSafe: 'yet-another-tag' }
+}
 ```
 
-You can use the resulting `tags` array to create links to tag pages.
+The structure of the converted page tags is compatible with the structure in the global `tags` object and ensures that you can reuse layout partials no matter if they display page tags or all tags from the global tags object.
+
+In a [Pug](https://pugjs.org/) partial, for example, you can access `tags` like this
+
+    each obj, tag in tags
+      a(href=`${site.baseUrl}tags/${obj.urlSafe}/`)= tag
+
+and `tags` can be the page tags or the global `tags`.
 
 ### Global tags object
 
