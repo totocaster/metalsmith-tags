@@ -1,166 +1,253 @@
 var assert = require('assert');
-var equal = require('assert-dir-equal');
 var Metalsmith = require('metalsmith');
-var layouts = require('metalsmith-layouts');
 var tags = require('../lib');
-var Handlebars = require('handlebars');
-var moment = require('moment');
-var slug = require('slug');
-
-Handlebars.registerHelper('dateFormat', function(context, format) {
-  var f = format || 'DD/MM/YYYY';
-  return moment(new Date(context)).format(f);
-});
 
 describe('metalsmith-tags', function() {
-
-  it('should modify comma separated tags into dehumanized array', function(done) {
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path:'topics'
-      }))
-      .build(function(err,files){
+  describe('default behavior', function() {
+    it('should convert comma separated page tags into sorted tag objects array', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags());
+      builder.build(function(err, files) {
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
-        assert.equal(files['index.html'].tagsUrlSafe.toString(),['hello', 'world', 'this-is', 'tag'].toString());
-        done();
-      });
-  });
-
-  it('should create a tags property to metalsmith.metadata', function(done) {
-    var tagList;
-
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path: 'topics'
-      }))
-      .use(function(files, metalsmith, done) {
-        tagList = metalsmith.metadata().tags;
-        done();
-      })
-      .build(function(err, files){
-        if (err) return done(err);
-        var tagListKeys = Object.keys(tagList).sort();
-        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
-        // Ensure every object in the metadata tags array is a data object.
-        tagListKeys.forEach(function(tagName) {
-          var tagPostsArray = tagList[tagName];
-          tagPostsArray.forEach(function(fileData) {
-            assert.equal(typeof fileData, 'object');
-            assert.ok(fileData.stats);
-            assert.ok(fileData.contents);
-            assert.ok(fileData.tags);
-          });
+        assert.deepEqual(files['index.html'].tags, {
+          hello: { urlSafe: 'hello' },
+          tag: { urlSafe: 'tag' },
+          'this is': { urlSafe: 'this-is' },
+          world: { urlSafe: 'world' }
         });
         done();
       });
-  });
+    });
 
-  it('should add a urlSafe property to each tag post list', function(done) {
-    var tagList;
-
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path: 'topics'
-      }))
-      .use(function(files, metalsmith, done) {
-        tagList = metalsmith.metadata().tags;
-        done();
-      })
-      .build(function(err, files){
+    it('should add tags object to metadata with tags sorted in ascending order', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags());
+      builder.build(function(err, files) {
         if (err) return done(err);
-        var tagListKeys = Object.keys(tagList).sort();
-        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
-        // Ensure every object in the metadata tags array is a data object.
-        tagListKeys.forEach(function(tagName) {
-          var tagPostsArray = tagList[tagName];
-          assert.ok(tagList[tagName].urlSafe);
-          assert.equal(typeof tagList[tagName].urlSafe, 'string');
-          assert.equal(slug(tagName), tagList[tagName].urlSafe);
-        });
+        var tags = builder.metadata().tags;
+
+        // check tags are sorted in ascending order
+        assert.deepEqual(Object.keys(tags), ['hello', 'tag', 'this', 'this is', 'world']);
         done();
       });
-  });
+    });
 
-  it('should skip creating a tags property on metalsmith.metadata', function(done) {
-    var tagList;
-
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path: 'topics',
-        skipMetadata: true
-      }))
-      .use(function(files, metalsmith, done) {
-        tagList = metalsmith.metadata().tags;
-        done();
-      })
-      .build(function(err, files){
+    it('should sort tagged files by title ascending', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags());
+      builder.build(function(err, files) {
         if (err) return done(err);
-        assert.equal(typeof tagList, 'undefined');
+        var tags = builder.metadata().tags;
+
+        // check sort order for tagged files for 'hello' tag
+        // title from json.html not included since it defines tags as array instead of comma separated string
+        assert.deepEqual(tags['hello'].map(function(file) { return file.title; }), [
+          'about',
+          'test',
+          'test page 2'
+        ]);
+
+        // check sort order for tagged files for 'tag' tag
+        // title from json.html not included since it defines tags as array instead of comma separated string
+        assert.deepEqual(tags['tag'].map(function(file) { return file.title; }), [
+          'test',
+          'test page 2'
+        ]);
+
+        // check sort order for tagged files for 'this' tag
+        assert.deepEqual(tags['this'].map(function(file) { return file.title; }), [
+          'test page 2'
+        ]);
+
+        // check sort order for tagged files for 'this is' tag
+        assert.deepEqual(tags['this is'].map(function(file) { return file.title; }), [
+          'test'
+        ]);
+
+        // check sort order for tagged files for 'world' tag
+        assert.deepEqual(tags['world'].map(function(file) { return file.title; }), [
+          'test'
+        ]);
+
         done();
       });
-  });
+    });
 
-  var templateConfig = {
-    engine: 'handlebars',
-    directory: './',
-    pattern: "topics/**/*.html"
-  };
-
-  it('should create tag page with post lists according to template and sorted by date decreasing', function(done) {
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path: 'topics/:tag.html',
-        layout: './tag.hbt',
-        sortBy: 'date',
-        reverse: true
-      }))
-      .use(layouts(templateConfig))
-      .build(function(err){
+    it('should add property \'urlSafe\' to each tag in tag object', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags());
+      builder.build(function(err, files) {
         if (err) return done(err);
-        equal('test/fixtures/expected/no-pagination/topics', 'test/fixtures/build/topics');
+        var tags = builder.metadata().tags;
+
+        // check urlSafe property for all tags
+        assert.equal(tags['hello'].urlSafe, 'hello');
+        assert.equal(tags['tag'].urlSafe, 'tag');
+        assert.equal(tags['this'].urlSafe, 'this');
+        assert.equal(tags['this is'].urlSafe, 'this-is');
+        assert.equal(tags['world'].urlSafe, 'world');
+
         done();
       });
-  });
+    });
 
-  it('should create tag pages with pagination with post lists according to template and sorted by date decreasing', function(done) {
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
+    it('should create tag pages with tagged pages sorted asc in page metadata', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags());
+      builder.build(function(err, files) {
+        if (err) return done(err);
+
+        // check tag page for 'hello' tag
+        var taggedFiles = files['tags/hello/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'about',
+          'test',
+          'test page 2'
+        ]);
+
+        // check tag page for `tag` tag
+        taggedFiles = files['tags/tag/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test',
+          'test page 2'
+        ]);
+
+        // check tag page for `this` tag
+        taggedFiles = files['tags/this/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test page 2'
+        ]);
+
+        // check tag page for 'this is' tag
+        taggedFiles = files['tags/this-is/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test'
+        ]);
+
+        // check tag page for 'world' tag
+        taggedFiles = files['tags/world/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test'
+        ]);
+
+        done();
+      });
+    });
+
+    it('should create paginated tag pages', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags({
         path: 'topics/:tag/index.html',
         pathPage: 'topics/:tag/:num/index.html',
-        perPage: 1,
-        layout: './tag.hbt',
-        sortBy: 'date',
-        reverse: true
-      }))
-      .use(layouts(templateConfig))
-      .build(function(err){
+        perPage: 2
+      }));
+      builder.build(function(err, files) {
         if (err) return done(err);
-        equal('test/fixtures/expected/pagination/topics', 'test/fixtures/build/topics');
+
+        // check tag pages for 'hello' tag
+
+        // first tag page
+        var taggedFiles = files['topics/hello/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'about',
+          'test'
+        ]);
+
+        // second tag page
+        taggedFiles = files['topics/hello/2/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test page 2'
+        ]);
+
+        // check tag pages for 'tag' tag
+
+        // only one tag page
+        taggedFiles = files['topics/tag/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test',
+          'test page 2'
+        ]);
+
+        // check tag pages for 'this' tag
+
+        // only one tag page
+        taggedFiles = files['topics/this/index.html'].pagination.files;
+        assert.deepEqual(taggedFiles.map(function(file) { return file.title; }), [
+          'test page 2'
+        ]);
+
         done();
       });
+    });
   });
 
-  it('should support custom slug functions', function(done) {
-    Metalsmith('test/fixtures')
-      .use(tags({
-        handle: 'tags',
-        path: 'topics',
-        slug: function(tag) {
-          return tag.toUpperCase();
-        }
-      }))
-      .build(function(err, files) {
+  describe('configuration options', function() {
+    it('should sort tagged files by date ascending', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags({
+        sortBy: 'date'
+      }));
+      builder.build(function(err, files) {
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
-        assert.equal(files['index.html'].tagsUrlSafe.toString(),['HELLO', 'WORLD', 'THIS IS', 'TAG'].toString());
+        var tags = builder.metadata().tags;
+
+        assert.deepEqual(tags['hello'].map(function(file) { return file.title; }), [
+          'test page 2',
+          'test',
+          'about'
+        ]);
+
+        assert.deepEqual(tags['tag'].map(function(file) { return file.title; }), [
+          'test page 2',
+          'test'
+        ]);
+
         done();
       });
-  })
+    });
+
+    it('should sort tagged files by date descending', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags({
+        reverse: true,
+        sortBy: 'date'
+      }));
+      builder.build(function(err, files) {
+        if (err) return done(err);
+        var tags = builder.metadata().tags;
+
+        assert.deepEqual(tags['hello'].map(function(file) { return file.title; }), [
+          'about',
+          'test',
+          'test page 2'
+        ]);
+
+        assert.deepEqual(tags['tag'].map(function(file) { return file.title; }), [
+          'test',
+          'test page 2'
+        ]);
+
+        done();
+      });
+    });
+
+    it('should support a custom slug function', function(done) {
+      var builder = Metalsmith('test/fixtures');
+      builder.use(tags({
+        slug: function(tag) { return tag.toUpperCase(); }
+      }));
+      builder.build(function(err, files) {
+        if (err) return done(err);
+
+        assert.deepEqual(files['index.html'].tags, {
+          hello: { urlSafe: 'HELLO' },
+          tag: { urlSafe: 'TAG' },
+          'this is': { urlSafe: 'THIS IS' },
+          world: { urlSafe: 'WORLD' }
+        });
+
+        done();
+      });
+    });
+  });
 });

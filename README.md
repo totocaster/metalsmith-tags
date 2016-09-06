@@ -1,32 +1,52 @@
 # metalsmith-tags
 
-  A metalsmith plugin to create dedicated pages for tags in provided in metalsmith pages.
+  A metalsmith plugin to add tag pages to Metalsmith's `files` object.
 
-  **NOTE**: looking for new maintainers of this project. please consult [this issue for discussion.](https://github.com/totocaster/metalsmith-tags/issues/26)
+  **NOTE**: We are looking for new maintainers for this project. Please consult [this issue for discussion.](https://github.com/totocaster/metalsmith-tags/issues/26)
 
 ## Installation
 
-    $ npm install metalsmith-tags
+    $ npm install --save metalsmith-tags
 
-## Description in Pages
+## How to tag pages
 
-  In your pages:
+Add your tags to the frontmatter as comma separated strings using the `tags` handle:
 
 ```
 ---
-title: This is page with tags
+title: This is a tagged page
 tags: tagged, page, metalsmith, plugin
 ---
 
 Hello World
 ```
 
-You can use different handle for the tags, by configuring the `handle` option. `tags` is the default.
+You can configure a different tags handle with the `handle` option.
 
+This plugin currently does not support tagging using arrays. With a YAML frontmatter tags defined like this
 
-## CLI Usage
+```
+---
+tags:
+  - tag 1
+  - tag 2
+  - tag 3
+---
+```
 
-  Install the node modules and then add the `metalsmith-tags` key to your `metalsmith.json` plugins. The simplest use case just requires tag handle you want to use:
+are ignored. Likewise, tags defined with an array in a JSON frontmatter like this
+
+```
+---
+{
+  "tags": ["tag 1", "tag 2", "tag 2"],
+}
+---
+```
+
+are ignored as well.
+
+## JSON configuration
 
 ```json
 {
@@ -35,12 +55,8 @@ You can use different handle for the tags, by configuring the `handle` option. `
       "handle": "tags",
       "path": "topics/:tag.html",
       "layout": "/partials/tag.hbt",
-      /* Can also use deprecated template property.
-      "template": "/partials/tag.hbt",
-      */
       "sortBy": "date",
       "reverse": true,
-      "skipMetadata": false,
       "slug": {
         "mode": "rfc3986"
       }
@@ -49,33 +65,23 @@ You can use different handle for the tags, by configuring the `handle` option. `
 }
 ```
 
-## JavaScript Usage
-
-  Pass the plugin to `Metalsmith#use`:
+## Programmatic configuration
 
 ```js
 var tags = require('metalsmith-tags');
 
 metalsmith
   .use(tags({
-    // yaml key for tag list in you pages
+    // YAML key for tag list in you pages
     handle: 'tags',
     // path for result pages
     path:'topics/:tag.html',
     // layout to use for tag listing
     layout:'/partials/tag.hbt',
-    // Can also use `template` property for use with the (deprecated)
-    // metalsmith-templates plugin. The `template` property is deprecated here
-    // as well but still available for use.
-    // template:'/partials/tag.hbt',
     // provide posts sorted by 'date' (optional)
     sortBy: 'date',
     // sort direction (optional)
     reverse: true,
-    // skip updating metalsmith's metadata object.
-    // useful for improving performance on large blogs
-    // (optional)
-    skipMetadata: false,
     // Any options you want to pass to the [slug](https://github.com/dodo/node-slug) package.
     // Can also supply a custom slug function.
     // slug: function(tag) { return tag.toLowerCase() }
@@ -83,53 +89,80 @@ metalsmith
   }));
 ```
 
-## Result
+## Metadata
 
-  This will generate `topics/[tagname].html` pages in your `build` directory with array of `pagination.files` objects on which you can iterate on. You can use `tag` for tag name in your layouts. (You can refer to tests folder for tags layout.)
+This plugin alters the following metadata.
 
-  The `tags` property on your pages will remain but it will be modified to an array of String containing the tags.
+### Page metadata
 
-  There will also be a `tagsUrlSafe` array created that will contain an array of url safe tag names for use in url creation.
+The `tags` handle on tagged pages is converted into an array of sorted tag objects. The following tags
 
-  You can use `metalsmith-permalink` to customize the permalink of the tag pages as you would do with anything else.
+```
+tags: tag, another tag, yet another tag
+```
 
-  It is possible to use `opts.metadataKey` for defining the name of the global tag list.
-  By default it is `'tags'`.
+results in
 
-## Pagination
-
-  Additionally you can paginate your tag pages.  To do so add two additional properties to your configuration object, `pathPage` and `perPage`, and modify `path` to point to the root pagination location:
-
-```json
-{
-  "handle": "tags",
-  "path": "topics/:tag/index.html",
-  "pathPage": "topics/:tag/:num/index.html",
-  "perPage": 6,
-  "layout": "/partials/tag.hbt",
-  /* Can also use deprecated template property.
-  "template": "/partials/tag.hbt",
-  */
-  "sortBy": "date",
-  "reverse": true,
-  "skipMetadata": false,
-  "slug": {
-    "mode": "rfc3986"
-  }
+```
+tags: {
+  'another tag': { urlSafe: 'another-tag' },
+  tag: { urlSafe: 'tag' },
+  'yet another tag': { urlSafe: 'yet-another-tag' }
 }
 ```
 
-  This will paginate your array of tags so that 6 appear per page, with additional tag pages being nested underneath the first page of tags.  For additional details please look at the tests.
+The structure of the converted page tags is compatible with the structure in the global `tags` object and ensures that you can reuse layout partials no matter if they display page tags or all tags from the global tags object.
+
+In a [Pug](https://pugjs.org/) partial, for example, you can access `tags` like this
+
+    each obj, tag in tags
+      a(href=`${site.baseUrl}tags/${obj.urlSafe}/`)= tag
+
+and `tags` can be the page tags or the global `tags`.
+
+### Global tags object
+
+This plugin adds object `tags` with all tags to the global metadata. `tags` has the following structure:
+
+```
+{
+  tag 1: [page objects of pages tagged with tag 1],
+  tag 2: [page objects of pages tagged with tag 2],
+  ...
+}
+```
+
+Page objects are references to page objects in Metalsmith's `files`. You can access the `urlSafe` version like this:
+
+```
+tags['tag 1'].urlSafe
+```
+
+Note: the global `tags` object is not accessible on pages that have a `tags` handle. You can use `opts.metadataKey` to rename global tags object.
+
+## Pagination
+
+Tag pages can be paginated. Pagination requires the following pagination properties in the plugin configuration:
+
+- `path` should be set to the location of the first pagination page, e.g. `tags/:tag/index.html`.
+- `pathPage` should be set to the location of following pagination pages, e.g. `tags/:tag/:num/index.html`.
+- `perPage` indicated the number of tagged files per page.
+
+The default for `perPage` is `0`, which turns off pagination. This means that only one tag page per tag is generated.
+
+Pagination does two things:
+
+1. It adds the pagination pages to `files` so subsequent plugins such as [`metalsmith-layouts`](https://github.com/superwolff/metalsmith-layouts) can process them.
+2. It adds a `pagination` object to each generated page. You can access assigned files via `pagination.files`, the previous pagination page via `pagination.previous` and the following pagination page via `pagination.next`.
 
 ## Contribution
 
-  Feel free to contribute to this plug-in. Fork, commit, send pull request.
-  Issues, suggestions and bugs are more than welcome.
+Feel free to contribute to this plug-in. Fork, commit, send pull request. Issues, suggestions and bugs are more than welcome. Please make sure that `npm test` passes before submitting a pull request.
 
-  In case you add functionality, please write corresponding test. Test using `npm test`.
+In case you add functionality, please write corresponding tests.
 
-  Thanks!
+Thanks!
 
 ## License
 
-  MIT
+MIT
