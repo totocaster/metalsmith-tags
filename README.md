@@ -87,11 +87,7 @@ metalsmith
 
   This will generate `topics/[tagname].html` pages in your `build` directory with array of `pagination.files` objects on which you can iterate on. You can use `tag` for tag name in your layouts. (You can refer to tests folder for tags layout.)
 
-  The `tags` property on your pages will remain but it will be modified to an array of String containing the tags.
-
-  There will also be a `tagsUrlSafe` array created that will contain an array of url safe tag names for use in url creation.
-
-  There will also be a `tagsCollection` array created that will have an object containing the `urlSlug` and `display` properties of each tag.
+  The `tags` property on your pages will remain, but it will be modified to an array of objects containing a `name` and `slug` property for each tag.
 
   You can use `metalsmith-permalink` to customize the permalink of the tag pages as you would do with anything else.
 

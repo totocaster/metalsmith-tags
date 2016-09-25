@@ -22,9 +22,7 @@ describe('metalsmith-tags', function() {
       }))
       .build(function(err,files){
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
-        assert.equal(files['index.html'].tagsUrlSafe.toString(),['hello', 'world', 'this-is', 'tag'].toString());
-        assert.equal(files['index.html'].tagsCollection.toString(),[{ display: 'hello', urlSlug: 'hello'}, { display: 'world', urlSlug: 'world'}, { display: 'this is', urlSlug: 'this-is'}, { display: 'tag', urlSlug: 'tag'}].toString());
+        assert.equal(files['index.html'].tags.toString(),[{ name: 'hello', slug: 'hello'}, { name: 'world', slug: 'world'}, { name: 'this is', slug: 'this-is'}, { name: 'tag', slug: 'tag'}].toString());
         done();
       });
   });
@@ -159,8 +157,7 @@ describe('metalsmith-tags', function() {
       }))
       .build(function(err, files) {
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),['hello', 'world', 'this is', 'tag'].toString());
-        assert.equal(files['index.html'].tagsUrlSafe.toString(),['HELLO', 'WORLD', 'THIS IS', 'TAG'].toString());
+        assert.equal(files['index.html'].tags.toString(),[{ name: 'hello', slug: 'HELLO'}, { name: 'world', slug: 'WORLD'}, { name: 'this is', slug: 'THIS IS'}, { name: 'tag', slug: 'TAG'}].toString());
         done();
       });
   })
