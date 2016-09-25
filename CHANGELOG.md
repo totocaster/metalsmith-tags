@@ -1,3 +1,13 @@
+<a name="2.0.0"></a>
+# 2.0.0
+
+* Breaking: Combined the tagsCollection and tagsUrlSafe properties into one property.
+
+<a name="1.3.0"></a>
+# 1.3.0
+
+* Feature: Add a tagCollection property that holds a display and urlSafe format of each tag.
+
 <a name="1.2.0"></a>
 # 1.2.0
 
