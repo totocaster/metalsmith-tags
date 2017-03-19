@@ -76,6 +76,9 @@ metalsmith
     // useful for improving performance on large blogs
     // (optional)
     skipMetadata: false,
+    // Use a non-default key in the metadata. Useful if you you want to
+    // have two sets of tags in different sets with metalsmith-branch.
+    metadataKey: "category",
     // Any options you want to pass to the [slug](https://github.com/dodo/node-slug) package.
     // Can also supply a custom slug function.
     // slug: function(tag) { return tag.toLowerCase() }
