@@ -63,7 +63,8 @@ describe('metalsmith-tags', function() {
     Metalsmith('test/fixtures')
       .use(tags({
         handle: 'tags',
-        path: 'topics'
+        path: 'topics',
+        normalize: true,
       }))
       .use(function(files, metalsmith, done) {
         tagList = metalsmith.metadata().tags;
