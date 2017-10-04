@@ -104,7 +104,7 @@ metalsmith
 
 ### Normalized characters
 
-  Handle with care. This is to be seen rather as a fallback as it heavily depends on your 'slug' settings. If you use the standard setting provided in this readme (*rfc3986*), you should be good to go.
+  Handle with care. This is to be seen rather as a fallback as it heavily depends on your 'slug' settings. If you use the standard setting provided in this readme (*rfc3986*), you should be good to go.  Should fix [issue #48](https://github.com/totocaster/metalsmith-tags/issues/48).
 
 ## Pagination
 
