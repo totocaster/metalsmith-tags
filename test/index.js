@@ -22,7 +22,13 @@ describe('metalsmith-tags', function() {
       }))
       .build(function(err,files){
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),[{ name: 'hello', slug: 'hello'}, { name: 'world', slug: 'world'}, { name: 'this is', slug: 'this-is'}, { name: 'tag', slug: 'tag'}].toString());
+        assert.equal(files['index.html'].tags.toString(),[
+          { name: 'hello', slug: 'hello'},
+          { name: 'world', slug: 'world'},
+          { name: 'this is', slug: 'this-is'},
+          { name: 'tag', slug: 'tag'},
+          { name: 'skol', slug: 'skol'},
+        ].toString());
         done();
       });
   });
@@ -42,7 +48,55 @@ describe('metalsmith-tags', function() {
       .build(function(err, files){
         if (err) return done(err);
         var tagListKeys = Object.keys(tagList).sort();
-        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
+        assert.deepEqual(tagListKeys, [
+          'hello',
+          'skol',
+          'skØl',
+          'sköl',
+          'skøl',
+          'tag',
+          'this',
+          'this is',
+          'world',
+        ]);
+        // Ensure every object in the metadata tags array is a data object.
+        tagListKeys.forEach(function(tagName) {
+          var tagPostsArray = tagList[tagName];
+          tagPostsArray.forEach(function(fileData) {
+            assert.equal(typeof fileData, 'object');
+            assert.ok(fileData.stats);
+            assert.ok(fileData.contents);
+            assert.ok(fileData.tags);
+          });
+        });
+        done();
+      });
+  });
+  
+  it('should normalize special characters into their ascii equivalent using given slug function', function(done) {
+    var tagList;
+
+    Metalsmith('test/fixtures')
+      .use(tags({
+        handle: 'tags',
+        path: 'topics',
+        normalize: true,
+      }))
+      .use(function(files, metalsmith, done) {
+        tagList = metalsmith.metadata().tags;
+        done();
+      })
+      .build(function(err, files){
+        if (err) return done(err);
+        var tagListKeys = Object.keys(tagList).sort();
+        assert.deepEqual(tagListKeys, [
+          'hello',
+          'skol',
+          'tag',
+          'this',
+          'this-is',
+          'world',
+        ]);
         // Ensure every object in the metadata tags array is a data object.
         tagListKeys.forEach(function(tagName) {
           var tagPostsArray = tagList[tagName];
@@ -64,7 +118,6 @@ describe('metalsmith-tags', function() {
       .use(tags({
         handle: 'tags',
         path: 'topics',
-        normalize: true,
       }))
       .use(function(files, metalsmith, done) {
         tagList = metalsmith.metadata().tags;
@@ -73,13 +126,23 @@ describe('metalsmith-tags', function() {
       .build(function(err, files){
         if (err) return done(err);
         var tagListKeys = Object.keys(tagList).sort();
-        assert.deepEqual(tagListKeys, ['hello', 'tag', 'this', 'this is', 'world']);
+        assert.deepEqual(tagListKeys, [
+          'hello',
+          'skol',
+          'skØl',
+          'sköl',
+          'skøl',
+          'tag',
+          'this',
+          'this is',
+          'world',
+        ]);
         // Ensure every object in the metadata tags array is a data object.
         tagListKeys.forEach(function(tagName) {
           var tagPostsArray = tagList[tagName];
           assert.ok(tagList[tagName].urlSafe);
           assert.equal(typeof tagList[tagName].urlSafe, 'string');
-          assert.equal(slug(tagName), tagList[tagName].urlSafe);
+          assert.equal(slug(tagName, {mode: 'rfc3986'}), tagList[tagName].urlSafe);
         });
         done();
       });
@@ -117,6 +180,7 @@ describe('metalsmith-tags', function() {
         handle: 'tags',
         path: 'topics/:tag.html',
         layout: './tag.hbt',
+        normalize: true,
         sortBy: 'date',
         reverse: true
       }))
@@ -136,6 +200,7 @@ describe('metalsmith-tags', function() {
         pathPage: 'topics/:tag/:num/index.html',
         perPage: 1,
         layout: './tag.hbt',
+        normalize: true,
         sortBy: 'date',
         reverse: true
       }))
@@ -158,7 +223,13 @@ describe('metalsmith-tags', function() {
       }))
       .build(function(err, files) {
         if (err) return done(err);
-        assert.equal(files['index.html'].tags.toString(),[{ name: 'hello', slug: 'HELLO'}, { name: 'world', slug: 'WORLD'}, { name: 'this is', slug: 'THIS IS'}, { name: 'tag', slug: 'TAG'}].toString());
+        assert.equal(files['index.html'].tags.toString(),[
+          { name: 'hello', slug: 'HELLO'},
+          { name: 'world', slug: 'WORLD'},
+          { name: 'this is', slug: 'THIS IS'},
+          { name: 'tag', slug: 'TAG'},
+          { name: 'skol', slug: 'SKOL'},
+        ].toString());
         done();
       });
   })

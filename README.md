@@ -38,6 +38,7 @@ You can use different handle for the tags, by configuring the `handle` option. `
       /* Can also use deprecated template property.
       "template": "/partials/tag.hbt",
       */
+      "normalize": true,
       "sortBy": "date",
       "reverse": true,
       "skipMetadata": false,
@@ -68,6 +69,10 @@ metalsmith
     // metalsmith-templates plugin. The `template` property is deprecated here
     // as well but still available for use.
     // template:'/partials/tag.hbt',
+    // ------
+    // Normalize special characters like ØçßÜ to their ASCII equivalents ocssü
+    // makes use of the value assigned to the 'slug' property below
+    normalize: true,
     // provide posts sorted by 'date' (optional)
     sortBy: 'date',
     // sort direction (optional)
@@ -96,6 +101,10 @@ metalsmith
 
   It is possible to use `opts.metadataKey` for defining the name of the global tag list.
   By default it is `'tags'`.
+
+### Normalized characters
+
+  Handle with care. This is to be seen rather as a fallback as it heavily depends on your 'slug' settings. If you use the standard setting provided in this readme (*rfc3986*), you should be good to go.
 
 ## Pagination
 
