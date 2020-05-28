@@ -9,7 +9,7 @@ var slug = require('slug');
 
 Handlebars.registerHelper('dateFormat', function(context, format) {
   var f = format || 'DD/MM/YYYY';
-  return moment(new Date(context)).format(f);
+  return moment(new Date(context)).utcOffset('+0000').format(f);
 });
 
 describe('metalsmith-tags', function() {
