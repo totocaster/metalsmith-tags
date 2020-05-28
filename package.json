@@ -23,6 +23,7 @@
   "homepage": "https://github.com/totocaster/metalsmith-tags",
   "devDependencies": {
     "assert-dir-equal": "1.0.1",
+    "debug": "^3.1.0",
     "handlebars": "*",
     "metalsmith": "1.x",
     "metalsmith-layouts": "1.x",
